@@ -7,6 +7,7 @@ namespace Tests\Petrunko\Web\Form;
 use Petrunko\Web\Form\Element\Enum\InputTypeEnum;
 use Petrunko\Web\Form\Element\File;
 use Petrunko\Web\Form\Element\InputFormElement;
+use Petrunko\Web\Form\Element\LinkElement;
 use Petrunko\Web\Form\Enum\EncTypeEnum;
 use Petrunko\Web\Form\Form;
 use PHPUnit\Framework\TestCase;
@@ -32,6 +33,7 @@ class FormTest extends TestCase
                 '<label for="fileUpload">Document</label>' .
                 '<input name="doc" type="file" id="fileUpload" />' .
                 '<input name="submit" type="submit" value="Submit" />' .
+                '<a href="https://foo.bar" target="_self" class="link-looking-like-button">Click me!</a>' .
             '</form>',
             (new Form())
                 ->setAction('submit.php')
@@ -51,6 +53,10 @@ class FormTest extends TestCase
                     (new InputFormElement('submit'))
                         ->setType(InputTypeEnum::SUBMIT)
                         ->setValue('Submit')
+                )
+                ->addElement(
+                    (new LinkElement('https://foo.bar', 'Click me!'))
+                        ->setClass('link-looking-like-button')
                 )
                 ->render()
         );
