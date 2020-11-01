@@ -6,19 +6,21 @@ namespace Petrunko\Web\Form\Element;
 
 class SelectOptionElement extends AbstractFormElement
 {
-    protected bool $isSelected = false;
-
     public function __construct($value, string $label, bool $isSelected = false)
     {
         parent::__construct('');
         $this->value = $value;
         $this->label = $label;
-        $this->isSelected = $isSelected;
+        if ($isSelected) {
+            $this->addAttribute('selected', 'selected');
+        }
     }
 
-    public function setIsSelected(bool $isSelected): self
+    public function setSelected(bool $isSelected): self
     {
-        $this->isSelected = $isSelected;
+        if ($isSelected) {
+            $this->addAttribute('selected', 'selected');
+        }
         return $this;
     }
 
@@ -26,8 +28,7 @@ class SelectOptionElement extends AbstractFormElement
     {
         return "<option"
             . ($this->value !== null ? " value=\"{$this->value}\"" : '')
-            . ($this->isDisabled ? ' disabled' : '')
-            . ($this->isSelected ? ' selected' : '')
+            . ' ' . $this->renderAttributes()
             . ">"
             . $this->label
             . "</option>";

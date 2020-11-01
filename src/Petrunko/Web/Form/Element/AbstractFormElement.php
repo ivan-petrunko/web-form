@@ -7,38 +7,38 @@ namespace Petrunko\Web\Form\Element;
 abstract class AbstractFormElement implements FormElementInterface
 {
     protected string $name;
-    protected ?string $id = null;
     protected ?string $label = null;
-    protected ?string $class = null;
     protected $value = null;
-    protected bool $isDisabled = false;
-    protected bool $isReadonly = false;
-    protected bool $isRequired = false;
     /**
      * @var FormElementInterface[]
      */
     protected array $children = [];
+
+    /**
+     * @var string[]|int[]|float[]
+     */
+    protected array $attributes = [];
 
     public function __construct(string $name)
     {
         $this->name = $name;
     }
 
-    public function setId(?string $id): self
+    public function setId(string $id): self
     {
-        $this->id = $id;
+        $this->addAttribute('id', $id);
         return $this;
     }
 
-    public function setLabel(?string $label): self
+    public function setLabel(string $label): self
     {
         $this->label = $label;
         return $this;
     }
 
-    public function setClass(?string $class): self
+    public function setClass(string $class): self
     {
-        $this->class = $class;
+        $this->addAttribute('class', $class);
         return $this;
     }
 
@@ -48,21 +48,21 @@ abstract class AbstractFormElement implements FormElementInterface
         return $this;
     }
 
-    public function setIsDisabled(bool $isDisabled): self
+    public function setDisabled(): self
     {
-        $this->isDisabled = $isDisabled;
+        $this->addAttribute('disabled', 'disabled');
         return $this;
     }
 
-    public function setIsReadonly(bool $isReadonly): self
+    public function setReadonly(): self
     {
-        $this->isReadonly = $isReadonly;
+        $this->addAttribute('readonly', 'readonly');
         return $this;
     }
 
-    public function setIsRequired(bool $isRequired): self
+    public function setRequired(): self
     {
-        $this->isRequired = $isRequired;
+        $this->addAttribute('required', 'required');
         return $this;
     }
 
@@ -70,5 +70,40 @@ abstract class AbstractFormElement implements FormElementInterface
     {
         $this->children[] = $child;
         return $this;
+    }
+
+    public function addAttribute(string $key, $value): self
+    {
+        $this->attributes[$key] = $value;
+        return $this;
+    }
+
+    public function removeAttribute(string $key): self
+    {
+        unset($this->attributes[$key]);
+        return $this;
+    }
+
+    public function hasAttribute(string $key): bool
+    {
+        return isset($this->attributes[$key]);
+    }
+
+    public function getAttribute(string $key)
+    {
+        return $this->attributes[$key] ?? null;
+    }
+
+    protected function renderAttributes(): string
+    {
+        return implode(
+            ' ',
+            array_map(
+                function (string $key) {
+                    return sprintf('%s="%s"', $key, $this->attributes[$key]);
+                },
+                array_keys($this->attributes)
+            )
+        );
     }
 }

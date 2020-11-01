@@ -10,14 +10,16 @@ class SelectOptionGroup extends AbstractFormElement
     {
         parent::__construct('');
         $this->label = $label;
-        $this->isDisabled = $isDisabled;
+        if ($isDisabled) {
+            $this->setDisabled();
+        }
     }
 
     public function render(): string
     {
         $html = "<optgroup"
             . ($this->label !== null ? " label=\"{$this->label}\"" : '')
-            . ($this->isDisabled ? ' disabled' : '')
+            . ' ' . $this->renderAttributes()
             . ">";
         foreach ($this->children as $child) {
             $html .= $child->render();

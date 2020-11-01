@@ -8,60 +8,61 @@ use Petrunko\Web\Form\Element\Enum\InputTypeEnum;
 
 class InputFormElement extends AbstractFormElement
 {
-    protected string $type = InputTypeEnum::TEXT;
-    protected ?string $placeholder = null;
-    protected ?int $minLength = null;
-    protected ?int $maxLength = null;
-    protected ?int $minValue = null;
-    protected ?int $maxValue = null;
-    protected bool $isAutocomplete = true;
-    protected bool $isChecked = false;
+    public function __construct(string $name, string $type = InputTypeEnum::TEXT)
+    {
+        parent::__construct($name);
+        $this->addAttribute('type', $type);
+    }
 
     public function setType(string $type): self
     {
-        $this->type = $type;
+        $this->addAttribute('type', $type);
         return $this;
     }
 
-    public function setPlaceholder(?string $placeholder): self
+    public function setPlaceholder(string $placeholder): self
     {
-        $this->placeholder = $placeholder;
+        $this->addAttribute('placeholder', $placeholder);
         return $this;
     }
 
-    public function setMinLength(?int $minLength): self
+    public function setMinLength(int $minLength): self
     {
-        $this->minLength = $minLength;
+        $this->addAttribute('minlength', $minLength);
         return $this;
     }
 
-    public function setMaxLength(?int $maxLength): self
+    public function setMaxLength(int $maxLength): self
     {
-        $this->maxLength = $maxLength;
+        $this->addAttribute('maxlength', $maxLength);
         return $this;
     }
 
-    public function setMinValue(?int $minValue): self
+    public function setMinValue(int $minValue): self
     {
-        $this->minValue = $minValue;
+        $this->addAttribute('min', $minValue);
         return $this;
     }
 
-    public function setMaxValue(?int $maxValue): self
+    public function setMaxValue(int $maxValue): self
     {
-        $this->maxValue = $maxValue;
+        $this->addAttribute('max', $maxValue);
         return $this;
     }
 
-    public function setIsAutocomplete(bool $isAutocomplete): self
+    public function setAutocomplete(bool $isAutocomplete): self
     {
-        $this->isAutocomplete = $isAutocomplete;
+        if (!$isAutocomplete) {
+            $this->addAttribute('autocomplete', 'off');
+        }
         return $this;
     }
 
-    public function setIsChecked(bool $isChecked): self
+    public function setChecked(bool $isChecked): self
     {
-        $this->isChecked = $isChecked;
+        if ($isChecked) {
+            $this->addAttribute('checked', 'checked');
+        }
         return $this;
     }
 
@@ -70,26 +71,14 @@ class InputFormElement extends AbstractFormElement
         return ($this->label !== null
                 ? (
                     "<label"
-                    . ($this->id !== null ? " for=\"{$this->id}\"" : '')
+                    . ($this->hasAttribute('id') ? " for=\"{$this->getAttribute('id')}\"" : '')
                     . ">{$this->label}</label>"
                 )
                 : '')
             . "<input"
             . " name=\"{$this->name}\""
-            . " type=\"{$this->type}\""
-            . ($this->id !== null ? " id=\"{$this->id}\"": '')
-            . ($this->class !== null ? " class=\"{$this->class}\"" : '')
             . ($this->value !== null ? " value=\"{$this->value}\"" : '')
-            . ($this->placeholder !== null ? " placeholder=\"{$this->placeholder}\"" : '')
-            . ($this->minLength !== null ? " minlength=\"{$this->minLength}\"" : '')
-            . ($this->maxLength !== null ? " maxlength=\"{$this->maxLength}\"" : '')
-            . ($this->minValue !== null ? " min=\"{$this->minValue}\"" : '')
-            . ($this->maxValue !== null ? " max=\"{$this->maxValue}\"" : '')
-            . ($this->isAutocomplete === false ? " autocomplete=\"off\"" : '')
-            . ($this->isChecked ? ' checked' : '')
-            . ($this->isDisabled ? ' disabled' : '')
-            . ($this->isReadonly ? ' readonly' : '')
-            . ($this->isRequired ? ' required' : '')
+            . ' ' . $this->renderAttributes()
             . " />";
     }
 }

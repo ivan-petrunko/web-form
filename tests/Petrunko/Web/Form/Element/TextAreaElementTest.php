@@ -7,17 +7,20 @@ namespace Tests\Petrunko\Web\Form\Element;
 use Petrunko\Web\Form\Element\TextAreaElement;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \Petrunko\Web\Form\Element\TextAreaElement
+ */
 class TextAreaElementTest extends TestCase
 {
     public function testRender(): void
     {
         self::assertEquals(
-            '<label for="txtComment">Comment</label><textarea name="comment" id="txtComment" class="comment-field" placeholder="Type something here" minlength="100" maxlength="512" rows="5" cols="20" required>Some text is already here!</textarea>',
+            '<label for="txtComment">Comment</label><textarea name="comment" id="txtComment" placeholder="Type something here" required="required" minlength="100" maxlength="512" rows="5" cols="20" class="comment-field">Some text is already here!</textarea>',
             (new TextAreaElement('comment'))
                 ->setId('txtComment')
                 ->setLabel('Comment')
                 ->setPlaceholder('Type something here')
-                ->setIsRequired(true)
+                ->setRequired()
                 ->setMinLength(100)
                 ->setMaxLength(512)
                 ->setRows(5)

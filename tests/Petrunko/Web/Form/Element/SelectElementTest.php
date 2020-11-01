@@ -10,8 +10,6 @@ use Petrunko\Web\Form\Element\SelectOptionGroup;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class SelectElementTest
- * @package Tests\Petrunko\Web\Form\Element
  * @covers \Petrunko\Web\Form\Element\SelectElement
  */
 class SelectElementTest extends TestCase
@@ -19,7 +17,7 @@ class SelectElementTest extends TestCase
     public function testRender(): void
     {
         self::assertEquals(
-            '<select name="select"></select>',
+            '<select name="select" ></select>',
             (new SelectElement('select'))
                 ->render()
         );
@@ -27,8 +25,8 @@ class SelectElementTest extends TestCase
         self::assertEquals(
             '<label for="selectGender">Gender</label>' .
             '<select name="gender" id="selectGender">' .
-                '<option value="male">Male</option>' .
-                '<option value="female">Female</option>' .
+                '<option value="male" >Male</option>' .
+                '<option value="female" >Female</option>' .
             '</select>',
             (new SelectElement('gender'))
                 ->setId('selectGender')
@@ -41,14 +39,14 @@ class SelectElementTest extends TestCase
         self::assertEquals(
             '<label for="selectWhoAmI">Who am I?</label>' .
             '<select name="who_am_i" id="selectWhoAmI">' .
-                '<optgroup label="Human">' .
-                    '<option value="male" selected>Male</option>' .
-                    '<option value="female">Female</option>' .
+                '<optgroup label="Human" >' .
+                    '<option value="male" selected="selected">Male</option>' .
+                    '<option value="female" >Female</option>' .
                 '</optgroup>' .
-                '<optgroup label="Pet" disabled>' .
-                    '<option value="dog">Dog</option>' .
-                    '<option value="cat">Cat</option>' .
-                    '<option value="parrot">Parrot</option>' .
+                '<optgroup label="Pet" disabled="disabled">' .
+                    '<option value="dog" >Dog</option>' .
+                    '<option value="cat" >Cat</option>' .
+                    '<option value="parrot" >Parrot</option>' .
                 '</optgroup>' .
             '</select>',
             (new SelectElement('who_am_i'))

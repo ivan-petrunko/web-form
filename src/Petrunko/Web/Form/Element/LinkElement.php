@@ -4,34 +4,28 @@ declare(strict_types=1);
 
 namespace Petrunko\Web\Form\Element;
 
-use Petrunko\Web\Form\Element\Enum\LinkTargetEnum;
-
 class LinkElement extends AbstractFormElement
 {
-    private ?string $url = null;
-    private string $target = LinkTargetEnum::SELF;
-
     public function __construct(?string $url = null, ?string $label = null)
     {
         parent::__construct('');
-        $this->url = $url;
         $this->label = $label;
+        if ($url !== null) {
+            $this->addAttribute('href', $url);
+        }
     }
 
-    public function setTarget(string $target): void
+    public function setTarget(string $target): self
     {
-        $this->target = $target;
+        $this->addAttribute('target', $target);
+        return $this;
     }
 
     public function render(): string
     {
         return "<a"
-            . ($this->url !== null ? " href=\"{$this->url}\"" : '')
             . ($this->name !== '' ? " name=\"{$this->name}\"" : '')
-            . " target=\"{$this->target}\""
-            . ($this->id !== null ? " id=\"{$this->id}\"": '')
-            . ($this->class !== null ? " class=\"{$this->class}\"" : '')
-            . ($this->isDisabled ? ' disabled' : '')
+            . ' ' . $this->renderAttributes()
             . ">"
             . $this->label
             . "</a>";

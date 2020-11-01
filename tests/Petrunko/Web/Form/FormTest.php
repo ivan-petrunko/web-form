@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Petrunko\Web\Form;
 
 use Petrunko\Web\Form\Element\Enum\InputTypeEnum;
+use Petrunko\Web\Form\Element\Enum\LinkTargetEnum;
 use Petrunko\Web\Form\Element\File;
 use Petrunko\Web\Form\Element\InputFormElement;
 use Petrunko\Web\Form\Element\LinkElement;
@@ -13,8 +14,6 @@ use Petrunko\Web\Form\Form;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class FormTest
- * @package Tests\Petrunko\Web\Form
  * @covers \Petrunko\Web\Form\Form
  */
 class FormTest extends TestCase
@@ -29,11 +28,11 @@ class FormTest extends TestCase
         self::assertEquals(
             '<form action="submit.php" method="POST" enctype="multipart/form-data">' .
                 '<label for="name">Name</label>' .
-                '<input name="name" type="text" id="name" required />' .
+                '<input name="name" type="text" id="name" required="required" />' .
                 '<label for="fileUpload">Document</label>' .
-                '<input name="doc" type="file" id="fileUpload" />' .
-                '<input name="submit" type="submit" value="Submit" />' .
-                '<a href="https://foo.bar" target="_self" class="link-looking-like-button">Click me!</a>' .
+                '<input name="doc" type="text" id="fileUpload" />' .
+                '<input name="submit" value="Submit" type="submit" />' .
+                '<a href="https://foo.bar" target="_blank" class="link-looking-like-button">Click me!</a>' .
             '</form>',
             (new Form())
                 ->setAction('submit.php')
@@ -42,7 +41,7 @@ class FormTest extends TestCase
                     (new InputFormElement('name'))
                         ->setId('name')
                         ->setLabel('Name')
-                        ->setIsRequired(true)
+                        ->setRequired()
                 )
                 ->addElement(
                     (new File('doc'))
@@ -56,6 +55,7 @@ class FormTest extends TestCase
                 )
                 ->addElement(
                     (new LinkElement('https://foo.bar', 'Click me!'))
+                        ->setTarget(LinkTargetEnum::BLANK)
                         ->setClass('link-looking-like-button')
                 )
                 ->render()
