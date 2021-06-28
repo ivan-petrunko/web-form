@@ -68,6 +68,24 @@ class InputFormElement extends AbstractFormElement
 
     public function render(): string
     {
+        $type = $this->getAttribute('type');
+        if ($type === InputTypeEnum::CHECKBOX || $type === InputTypeEnum::RADIO) {
+            return '<div class="form-check">'
+                . "<input"
+                . " name=\"{$this->name}\""
+                . ($this->value !== null ? " value=\"{$this->value}\"" : '')
+                . ' ' . $this->renderAttributes()
+                . " />"
+                .($this->label !== null
+                    ? (
+                        "<label class=\"form-check-label\""
+                        . ($this->hasAttribute('id') ? " for=\"{$this->getAttribute('id')}\"" : '')
+                        . ">{$this->label}</label>"
+                    )
+                    : '')
+                ."</div>";
+        }
+
         return ($this->label !== null
                 ? (
                     "<label"
